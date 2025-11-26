@@ -7,7 +7,8 @@ This project (Roboshop) is composed of 10 microservices in 3-tire architecture.
 Each microservice (application) is serving a distinct function and interacting with various data base services (MongoDB, MySQL, Redis, RabbitMQ).
 
 ## ⚙️ architecture: 3-tier (frontend, backend, and databases)
-![3-tier architecture of roboshop](https://github.com/sivaram-ops/roboshop-3tier-microservices/blob/7199f09afe656dc669505aad935214d5a247a8cb/3-tier-microservices.png)
+![3-tier architecture of roboshop](https://github.com/sivaram-ops/roboshop-3tier-microservices/blob/911ce7b9b98c183618bff020afa4105f07f74a62/assets/3-tier-microservices.png)
+
 
 
 # About the directories in repo & their contents:
@@ -19,7 +20,3 @@ Each microservice (application) is serving a distinct function and interacting w
 6-CI-CD-with-jenkins: Jenkins Files for pipelines etc.  
 7-Observability: Monotoring and solutions to the chanllenges.  
 'assets' direcoty: to store images (for markdown files)  
-
-
-
-
