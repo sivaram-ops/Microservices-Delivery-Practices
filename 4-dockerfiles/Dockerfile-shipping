@@ -1,0 +1,14 @@
+# stage 1
+FROM maven AS build
+WORKDIR /shipping
+COPY pom.xml .
+RUN mvn dependency:resolve
+COPY /src/ ./src/
+RUN mvn package
+# stage 2
+FROM amazoncorretto:25
+EXPOSE 8080
+WORKDIR /shipping
+ENV CART_ENDPOINT=cart:8080 DB_HOST=mysql
+COPY --from=build /shipping/target/shipping-1.0.jar ./shipping.jar
+CMD [ "java", "-jar", "shipping.jar" ]

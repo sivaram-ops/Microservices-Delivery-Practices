@@ -1,0 +1,11 @@
+FROM node:alpine
+WORKDIR /catalogue
+ENV MONGO='true'
+EXPOSE 8080
+RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
+RUN chown roboshop:roboshop .
+USER roboshop
+COPY package.json .
+RUN npm install
+COPY server.js .
+CMD ["node", "server.js"]
