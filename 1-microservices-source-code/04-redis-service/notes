@@ -1,5 +1,0 @@
-redis is in memory cache database.
-a clean application installation is fine to use with other microservices.
-so, no source code to be supplied.
-
-but it's best practice to save it's live state.
