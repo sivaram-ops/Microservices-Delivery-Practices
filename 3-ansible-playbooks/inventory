@@ -1,35 +1,33 @@
 [frontend]
-34.236.154.244
+frontend ansible_host=13.220.38.1 ansible_user=ec2-user
 
 [mongodb]
-54.145.42.197
+mongodb ansible_host=107.23.75.73 ansible_user=ec2-user
 
 [catalogue]
-13.218.223.149
+catalogue ansible_host=13.220.9.114 ansible_user=ec2-user
 
 [redis]
-98.89.35.74
+redis ansible_host=44.211.85.45 ansible_user=ec2-user
 
-[userapp]
-13.222.169.33
+[user]
+user ansible_host=3.231.205.217 ansible_user=ec2-user
 
 [cart]
-18.207.126.231
+cart ansible_host=3.231.209.25 ansible_user=ec2-user
 
 [mysql]
-54.172.233.74
+mysql ansible_host=98.92.237.154 ansible_user=ec2-user
 
 [shipping]
-204.236.203.200
-
-[payment]
-54.235.17.107
+shipping ansible_host=3.237.71.39 ansible_user=ec2-user
 
 [rabbitmq]
-98.84.175.207
+rabbitmq ansible_host=3.238.91.70 ansible_user=ec2-user
+
+[payment]
+payment ansible_host=13.220.64.9 ansible_user=ec2-user
 
 [all:vars]
-ansible_user=ec2-user
-ansible_private_key_file=~/kp-aws.pem
+ansible_private_key_file=~/sivaram-ops/vault/kp-aws.pem
 ansible_python_interpreter=/usr/bin/python3
-

@@ -1,0 +1,102 @@
+networks:
+  default:
+    name: roboshop
+    external: true
+
+volumes:
+  mongodb:
+  redis:
+  mysql:
+  rabbitmq:
+
+services:
+  mongodb:
+    build: ./1-microservices-source-code/3-mongodb-app
+    image: sivaram0101/mongodb-roboshop-image:v2
+    container_name: mongodb
+    volumes:
+    - source: mongodb
+      target: /data/db
+      type: volume
+
+  redis:
+    build: ./1-microservices-source-code/4-redis-app
+    image: sivaram0101/redis-roboshop-image:v2
+    container_name: redis
+    volumes:
+    - source: redis
+      target: /data
+      type: volume
+
+  mysql:
+    build: ./1-microservices-source-code/7-mysql-app
+    image: sivaram0101/mysql-roboshop-image:v2
+    container_name: mysql
+    volumes:
+    - source: mysql
+      target: /var/lib/mysql
+      type: volume
+
+  rabbitmq:
+    build: ./1-microservices-source-code/9-rabbitmq-app
+    image: sivaram0101/rabbitmq-roboshop-image:v2
+    container_name: rabbitmq
+    ports:
+    - "15672:15672" # Management Dashboard port (15672)
+    - "5672:5672" # AMQP protocol port (5672)
+    volumes:
+    - source: rabbitmq
+      target: /var/lib/rabbitmq
+      type: volume
+
+  catalogue:
+    build: ./1-microservices-source-code/2-catalogue-app
+    image: sivaram0101/catalogue-roboshop-image:v2
+    container_name: catalogue
+    depends_on:
+    - mongodb
+
+  cart:
+    build: ./1-microservices-source-code/5-cart-app
+    image: sivaram0101/cart-roboshop-image:v2
+    container_name: cart
+    depends_on:
+    - catalogue
+    - redis
+
+  user:
+    build: ./1-microservices-source-code/6-user-app
+    image: sivaram0101/user-roboshop-image:v2
+    container_name: user
+    depends_on:
+    - mongodb
+    - redis
+
+  shipping:
+    build: ./1-microservices-source-code/8-shipping-app
+    image: sivaram0101/shipping-roboshop-image:v2
+    container_name: shipping
+    depends_on:
+    - mysql
+
+  payment:
+    build: ./1-microservices-source-code/10-payment-app
+    image: sivaram0101/payment-roboshop-image:v2
+    container_name: payment
+    depends_on:
+    - rabbitmq
+    - user
+    - cart
+
+  frontend:
+    build: ./1-microservices-source-code/1-frontend-app
+    image: sivaram0101/frontend-roboshop-image:v2
+    container_name: frontend
+    ports:
+    - "80:80"
+    depends_on:
+    - catalogue
+    - cart
+    - user
+    - shipping
+    - payment

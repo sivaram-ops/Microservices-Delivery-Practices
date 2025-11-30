@@ -67,7 +67,7 @@
           [Service]
           User=roboshop
           Environment=MONGO=true
-          Environment=MONGO_URL=172.31.21.91:27017
+          Environment=MONGO_URL=mongodb:27017/catalogue
           ExecStart=/bin/node /home/roboshop/catalogue/server.js
           SyslogIdentifier=catalogue
           [Install]

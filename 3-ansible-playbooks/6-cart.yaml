@@ -4,8 +4,8 @@
   become: yes
 
   vars:
-    redis_host_ip: "172.31.17.172"
-    catalogue_host_ip: "172.31.21.82"
+    redis_host_ip: "10.0.1.86"
+    catalogue_host_ip: "10.0.1.214"
 
   tasks:
     - name: Installing NodeJS, Make, and gcc-c++.

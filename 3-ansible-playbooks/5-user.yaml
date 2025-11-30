@@ -1,11 +1,11 @@
 ---
 - name: Roboshop's User Application deployment play.
-  hosts: userapp
+  hosts: user
   become: yes
 
   vars:
-    redis_host_ip: "172.31.17.172"
-    mongodb_host_ip: "172.31.21.91"
+    redis_host_ip: "10.0.1.86"
+    mongodb_host_ip: "10.0.1.39"
 
   tasks:
     - name: Installing NodeJS, Make, and gcc-c++.

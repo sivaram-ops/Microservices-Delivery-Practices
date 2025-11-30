@@ -51,8 +51,8 @@
     - name: Change the config file with replace module.
       replace:
         path: /etc/redis6/redis6.conf
-        regexp: '^bind 0.0.0.0'
-        replace: 'bind 172.31.17.172'
+        regexp: '^bind 127.0.0.1'
+        replace: 'bind 0.0.0.0'
         backup: yes
       notify: restarting redis
 

@@ -78,11 +78,11 @@
           User=root
           WorkingDirectory=/home/roboshop/payment
 
-          Environment=CART_HOST=172.31.30.222
+          Environment=CART_HOST=10.0.1.8
           Environment=CART_PORT=8080
-          Environment=USER_HOST=172.31.19.116
+          Environment=USER_HOST=10.0.1.167
           Environment=USER_PORT=8080
-          Environment=AMQP_HOST=172.31.17.187
+          Environment=AMQP_HOST=10.0.1.239
           Environment=AMQP_USER=roboshop
           Environment=AMQP_PASS=roboshop123
 

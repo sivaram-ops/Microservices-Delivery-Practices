@@ -71,8 +71,8 @@
           WorkingDirectory=/home/roboshop/shipping
           ExecStart=/usr/bin/java -jar shipping.jar
           SuccessStatus=143
-          Environment=CART_ENDPOINT=172.31.30.222:8080
-          Environment=DB_HOST=172.31.25.252
+          Environment=CART_ENDPOINT=10.0.1.8:8080
+          Environment=DB_HOST=10.0.1.39
 
           [Install]
           WantedBy=multi-user.target
