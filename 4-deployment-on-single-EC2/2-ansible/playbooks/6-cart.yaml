@@ -1,0 +1,93 @@
+---
+- name: Roboshop's Cart Application deployment play.
+  hosts: aws
+  become: yes
+
+  vars:
+    redis_host_ip: "127.0.0.1"
+    catalogue_host_ip: "127.0.0.1"
+    app_dir: /home/roboshop/cart # Define the application directory
+
+  tasks:
+    - name: Installing NodeJS, Make, and gcc-c++.
+      dnf:
+        name:
+          - nodejs
+          - make
+          - gcc-c++
+        state: present
+
+    - name: Creating an user named roboshop.
+      user:
+        name: roboshop
+        state: present
+
+    - name: Creating a directoy for the cart application content.
+      file:
+        path: "{{ app_dir }}" # Use the variable
+        state: directory
+        owner: roboshop
+        group: roboshop
+        mode: '0700'
+    
+    # The original "Download and Unarchive..." (Task 4) is REMOVED.
+    
+    # 🚀 NEW TASK: Copy the local application code to the remote server.
+    - name: Copying local Cart application code to the remote host.
+      copy:
+        src: ../../1-roboshop-source-code-for-1-VM/4-cart/
+        dest: "{{ app_dir }}"
+        owner: roboshop
+        group: roboshop
+        mode: '0644'
+        
+    # The original "Moving contents of 'cart-main' directory..." (Task 5) and
+    # "Removing the 'cart-main' directory." (Task 6) are REMOVED.
+
+    - name: Ensuring a temporary directory exists with correct ownership for npm installation.
+      file:
+        path: /home/roboshop/.ansible/tmp
+        state: directory
+        owner: roboshop
+        group: roboshop
+        mode: '0700'
+
+    - name: Installing cart nodejs application as roboshop user.
+      become: yes
+      become_user: roboshop
+      community.general.npm:
+        path: "{{ app_dir }}" # Use the variable
+
+    # 🚀 IMPROVED TASK: Copy the systemd file from the local source directory.
+    - name: Copying the cart application's service file to 'etc/systemd/system'.
+      copy:
+        src: ../../1-roboshop-source-code-for-1-VM/4-cart/systemd.service
+        dest: /etc/systemd/system/cart.service
+        owner: root
+        group: root
+        mode: '0644'
+      # Removed 'remote_src: yes' as the file is copied from the control machine.
+
+#    - name: Updating the Cart application's configuration file with 'Redis IP'.
+#      replace:
+#        path: "/etc/systemd/system/cart.service"
+#        regexp: '^Environment=REDIS_HOST=REDIS_ENDPOINT'
+#        replace: 'Environment=REDIS_HOST={{ redis_host_ip }}'
+#        backup: yes
+
+#    - name: Updating the application's configuration file with 'Catalogue Ip'.
+#      replace:
+#        path: "/etc/systemd/system/cart.service"
+#        regexp: '^Environment=CATALOGUE_HOST=CATALOGUE_ENDPOINT'
+#        replace: 'Environment=CATALOGUE_HOST={{ catalogue_host_ip }}'
+#        backup: yes
+
+    - name: Reloading the systemd daemon service.
+      systemd_service:
+        daemon_reload: yes
+
+    - name: Enabling and starting the cart application.
+      systemd_service:
+        name: cart
+        enabled: yes
+        state: started

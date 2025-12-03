@@ -1,0 +1,69 @@
+---
+- name: Roboshop's Redis application deployment play.
+  hosts: aws
+  become: true
+
+  handlers:
+    - name: restarting redis
+      systemd:
+        name: redis6
+        state: restarted
+        daemon_reload: true
+
+  tasks:
+    - name: Installing redis.
+      dnf:
+        name: redis6
+        state: present
+        update_cache: yes
+      # NOTE: We defer starting/enabling until the config and service file are ready
+
+    - name: Starting and enabling the redis service.
+      systemd:
+        name: redis6
+        enabled: true
+        state: started
+
+#    # 🚀 NEW TASK: Copy the custom service definition file
+#    - name: Copying custom Redis systemd service file.
+#      copy:
+#        src: ../../1-roboshop-source-code-for-1-VM/8-redis/redis.service
+#        dest: /etc/systemd/system/redis.service # Use the standard service name if package provided one, or rename
+#        owner: root
+#        group: root
+#        mode: '0644'
+#      notify: restarting redis # Notify in case the content changes
+      
+    - name: Change the config file with replace module to listen on all IPs.
+      replace:
+        # NOTE: Using 'redis.conf' instead of 'redis6/redis6.conf' for better compatibility across RHEL flavors, 
+        # but keep your path if you know it's correct for your distro/package.
+        # path: /etc/redis6/redis6.conf 
+        path: /etc/redis6/redis6.conf 
+        regexp: '^bind 127\.0\.0\.1'
+        replace: 'bind 0.0.0.0'
+        backup: yes
+#      notify: restarting redis
+
+    - name: Ensuring systemd reloads configuration after service file update.
+      systemd_service:
+        daemon_reload: true
+      notify: restarting redis
+
+    # The original task is now redundant, as the service will be started/enabled after the config changes
+    # - name: Ensuring redis service is started and enabled.
+    #   systemd:
+    #     name: redis6
+    #     enabled: true
+    #     state: started
+    #     daemon_reload: true
+
+#    - name: Starting and enabling the redis service.
+#      systemd:
+#        name: redis
+#        enabled: true
+#        state: restarted
+
+    - name: Printing a message.
+      debug:
+        msg: "Redis is configured and running."
