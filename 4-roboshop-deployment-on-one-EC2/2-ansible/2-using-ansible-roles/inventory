@@ -1,5 +1,5 @@
 [aws]
-roboshop ansible_host=44.223.94.85 ansible_user=ec2-user
+roboshop ansible_host=44.203.225.179 ansible_user=ec2-user
 
 [all:vars]
 ansible_private_key_file=/home/phoenix/sivaram-ops/vault/kp-aws.pem

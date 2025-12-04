@@ -1,2 +1,5 @@
 ---
 # vars file for cart
+redis_host_ip: "127.0.0.1"
+catalogue_host_ip: "127.0.0.1"
+app_dir: /home/roboshop/cart # Define the application directory

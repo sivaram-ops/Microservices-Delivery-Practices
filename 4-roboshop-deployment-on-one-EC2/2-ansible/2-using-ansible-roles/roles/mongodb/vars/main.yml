@@ -1,2 +1,8 @@
 ---
 # vars file for mongodb
+mongodb_version: "7.0"
+# Removed schema_repo_url as we are using local files
+# Updated schema_extract_dir to use a simple path for local copies
+schema_temp_dir: "/tmp/schema_files" # New temporary directory for local files
+flag_path_catalogue: "/tmp/.catalogue_data_loaded"
+flag_path_user: "/tmp/.user_data_loaded"

@@ -1,2 +1,6 @@
 ---
 # vars file for payment
+app_dir: /home/roboshop/payment
+cart_host_ip: "127.0.0.1" # For CART_HOST
+user_host_ip: "127.0.0.1" # For USER_HOST
+amqp_host_ip: "127.0.0.1" # For AMQP_HOST

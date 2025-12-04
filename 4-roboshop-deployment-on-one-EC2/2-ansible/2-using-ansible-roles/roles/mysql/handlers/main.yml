@@ -1,2 +1,6 @@
 ---
 # handlers file for mysql
+- name: Restart mysqld
+  systemd:
+    name: mysqld
+    state: restarted

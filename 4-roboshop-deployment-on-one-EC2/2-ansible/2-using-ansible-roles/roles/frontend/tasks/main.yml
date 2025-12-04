@@ -1,2 +1,146 @@
 ---
 # tasks file for frontend
+- name: Installing Nginx.
+  dnf:
+    name: nginx
+    state: present
+  notify: start and enable nginx service
+
+# This task is fine as it ensures the root is clean before copying.
+- name: Ensuring html directory is clean.
+  file:
+    path: /usr/share/nginx/html
+    state: absent
+
+- name: Creating an empty html directory for apllication content.
+  file:
+    path: /usr/share/nginx/html/
+    state: directory
+    mode: '0755'
+
+# NEW TASK: Copy the local application code to the remote server.
+# The 'src' path is relative to the directory where the playbook is located (2-ansible/playbooks).
+# The '1-frontend/app-code' directory contains the files you want to serve.
+- name: Copying local Frontend application code to the Nginx root directory.
+  copy:
+    src: ../../1-roboshop-source-code-for-1-VM/1-frontend/app-code/
+    dest: /usr/share/nginx/html/
+#        owner: nginx # Set appropriate owner for Nginx
+#        group: nginx # Set appropriate group for Nginx
+    mode: '755' # Default file mode, or '0755' for directories/scripts if applicable
+
+# The following original tasks are now redundant and must be removed:
+# - Downloading and Unarchiving (replaced by copy)
+# - Moving contents of 'static' (not needed, content is now directly in 'app-code')
+# - Removing the static directory (not needed)
+# - Moving the contents of 'extracted directory' (not needed)
+# - Removing the extracted directory (not needed)
+
+# Note: The provided tree shows '1-frontend' contains an 'app-code' directory 
+# which holds all the frontend files (html, css, images, etc.). 
+# Assuming 'app-code' contents should go into /usr/share/nginx/html/. 
+
+- name: Copy Nginx configuration using content argument.
+  copy:
+    content: |
+          user nginx;
+          worker_processes 1;
+          pid /var/run/nginx.pid;
+
+          events {
+            worker_connections 256;
+            # multi_accept on;
+          }
+
+          http {
+
+            ##
+            # Basic Settings
+            ##
+
+            sendfile on;
+            tcp_nopush on;
+            tcp_nodelay on;
+            keepalive_timeout 65;
+            types_hash_max_size 2048;
+            large_client_header_buffers 6 32k;
+            client_max_body_size 100m;
+
+            # server_names_hash_bucket_size 64;
+            # server_name_in_redirect off;
+            include /etc/nginx/mime.types;
+            default_type application/octet-stream;
+
+            ##
+            # Logging Settings
+            ##
+            access_log /var/log/nginx/access.log;
+            error_log /var/log/nginx/error.log debug; # change from debug to warn or error for production
+
+            ##
+            # Gzip Settings
+            ##
+            gzip on;
+            gzip_disable "msie6";
+
+            ##
+            # Virtual Host Configs
+            ##
+
+            include /etc/nginx/conf.d/*.conf;
+            include /etc/nginx/sites-enabled/*;
+
+            server {
+              listen       80;
+              server_name  roboshop;
+              # changed 'server_name' from 'localhost' to 'roboshop'
+              proxy_http_version 1.1;
+
+              #charset koi8-r;
+              #access_log  /var/log/nginx/host.access.log  main;
+              #error_log /dev/stdout debug;
+              #rewrite_log on;
+
+              location / {
+                  root   /usr/share/nginx/html;
+                  index  index.html index.htm;
+                  ssi    on;
+              }
+
+              location /images/ {
+                  expires 5s;
+                  root   /usr/share/nginx/html;
+                  try_files $uri /images/placeholder.png;
+              }
+
+              #error_page  404              /404.html;
+              # redirect server error pages to the static page /50x.html
+              error_page   500 502 503 504  /50x.html;
+              location = /50x.html {
+                  root   /usr/share/nginx/html;
+              }
+
+              location /api/catalogue/ {
+                  proxy_pass http://localhost:8081/;
+              }
+
+              location /api/user/ {
+                  proxy_pass http://localhost:8082/;
+              }
+
+              location /api/cart/ {
+                  proxy_pass http://localhost:8083/;
+              }
+
+              location /api/shipping/ {
+                  proxy_pass http://localhost:8080/;
+              }
+
+              location /api/payment/ {
+                  proxy_pass http://localhost:8084/;
+              }
+          }
+          }
+    dest: /etc/nginx/nginx.conf
+    mode: '0644'
+  notify: restart nginx

@@ -1,2 +1,5 @@
 ---
 # vars file for user
+redis_host_ip: "127.0.0.1"
+mongodb_host_ip: "127.0.0.1"
+app_dir: /home/roboshop/user # Define the application directory for clarity
