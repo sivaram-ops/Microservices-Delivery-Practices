@@ -1,5 +1,0 @@
----
-# vars file for shipping
-cart_host_ip: "127.0.0.1" # Using cart_host_ip for CART_ENDPOINT
-db_host_ip: "127.0.0.1"   # Using db_host_ip for DB_HOST (MySQL)
-app_dir: /home/roboshop/shipping

@@ -1,3 +1,0 @@
----
-# vars file for rabbitmq
-rabbitmq_repo_src: ../../1-roboshop-source-code-for-1-VM/10-rabbitmq/rabbitmq.repo
