@@ -11,8 +11,8 @@ volumes:
 
 services:
   mongodb:
-    build: ./1-microservices-source-code/3-mongodb-app
-    image: sivaram0101/mongodb-roboshop-image:v2
+    build: ./07-mongodb-service
+    image: sivaram0101/mongodb-roboshop:v1
     container_name: mongodb
     volumes:
     - source: mongodb
@@ -20,8 +20,8 @@ services:
       type: volume
 
   redis:
-    build: ./1-microservices-source-code/4-redis-app
-    image: sivaram0101/redis-roboshop-image:v2
+    build: ./08-redis-service
+    image: sivaram0101/redis-roboshop:v1
     container_name: redis
     volumes:
     - source: redis
@@ -29,8 +29,8 @@ services:
       type: volume
 
   mysql:
-    build: ./1-microservices-source-code/7-mysql-app
-    image: sivaram0101/mysql-roboshop-image:v2
+    build: ./09-mysql-service
+    image: sivaram0101/mysql-roboshop:v1
     container_name: mysql
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -45,8 +45,8 @@ services:
 #      - networkname
 
   rabbitmq:
-    build: ./1-microservices-source-code/9-rabbitmq-app
-    image: sivaram0101/rabbitmq-roboshop-image:v2
+    build: ./10-rabbitmq-service
+    image: sivaram0101/rabbitmq-roboshop:v1
     container_name: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
@@ -60,38 +60,38 @@ services:
       type: volume
 
   catalogue:
-    build: ./1-microservices-source-code/2-catalogue-app
-    image: sivaram0101/catalogue-roboshop-image:v2
+    build: ./02-catalogue-service
+    image: sivaram0101/catalogue-roboshop:v1
     container_name: catalogue
     depends_on:
     - mongodb
 
   cart:
-    build: ./1-microservices-source-code/5-cart-app
-    image: sivaram0101/cart-roboshop-image:v2
+    build: ./04-cart-service
+    image: sivaram0101/cart-roboshop:v1
     container_name: cart
     depends_on:
     - catalogue
     - redis
 
   user:
-    build: ./1-microservices-source-code/6-user-app
-    image: sivaram0101/user-roboshop-image:v2
+    build: ./03-user-service
+    image: sivaram0101/user-roboshop:v1
     container_name: user
     depends_on:
     - mongodb
     - redis
 
   shipping:
-    build: ./1-microservices-source-code/8-shipping-app
+    build: ./05-shipping-service
     image: sivaram0101/shipping-roboshop-image:v2
     container_name: shipping
     depends_on:
     - mysql
 
   payment:
-    build: ./1-microservices-source-code/10-payment-app
-    image: sivaram0101/payment-roboshop-image:v2
+    build: ./06-payment-service
+    image: sivaram0101/payment-roboshop:v1
     container_name: payment
     environment:
       AMQP_USER=${AMQP_USER}
@@ -102,8 +102,8 @@ services:
     - cart
 
   frontend:
-    build: ./1-microservices-source-code/1-frontend-app
-    image: sivaram0101/frontend-roboshop-image:v2
+    build: ./01-frontend-service
+    image: sivaram0101/frontend-roboshop:v1
     container_name: frontend
     ports:
     - "80:80"
