@@ -3,7 +3,6 @@ FROM node:alpine AS build-direr
 WORKDIR /build-dir
 COPY package.json ./
 RUN npm install --production
-
 # stage 2
 FROM node:alpine
 WORKDIR /user

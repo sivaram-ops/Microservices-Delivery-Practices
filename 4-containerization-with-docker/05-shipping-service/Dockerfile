@@ -5,7 +5,6 @@ COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn clean package -DskipTests
-
 # stage 2
 FROM amazoncorretto:17-jre-alpine
 WORKDIR /shipping

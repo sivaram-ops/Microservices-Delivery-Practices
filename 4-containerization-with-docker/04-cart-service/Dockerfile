@@ -3,7 +3,6 @@ FROM node:alpine AS builder
 WORKDIR /build-dir
 COPY package.json ./
 RUN npm install --production
-
 # stage 2
 FROM node:alpine
 WORKDIR /cart

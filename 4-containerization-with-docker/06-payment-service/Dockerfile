@@ -11,7 +11,7 @@ WORKDIR /app
 RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
 USER roboshop
 EXPOSE 8080
-ENV AMQP_USER=roboshop AMQP_PASS=roboshop123 PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1
 COPY --from=builder /dependencies /usr/local/lib/python3.9/site-packages/
 COPY *.py /app/
 COPY payment.ini /app/
