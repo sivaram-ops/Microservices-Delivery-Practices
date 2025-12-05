@@ -63,12 +63,17 @@ def pay(id):
 
     # check user exists
     try:
-        req = requests.get('http://{user}:8080/check/{id}'.format(user=USER, id=id))
+        req = requests.get('http://{user}:8082/check/{id}'.format(user=USER, id=id))
     except requests.exceptions.RequestException as err:
         app.logger.error(err)
         return str(err), 500
-    if req.status_code == 200:
-        anonymous_user = False
+# commenting the following 2 lines. and adding 3 new lines for the logic. this is tested & working.
+#    if req.status_code == 200:
+    if req.status_code != 200:
+        app.logger.warn('User check failed: {}'.format(req.status_code))
+        return 'User not authorized or found', req.status_code
+        anonymous_user = False 
+# To know the user is valid and logged in (200 status)
 
     # check that the cart is valid
     # this will blow up if the cart is not valid
