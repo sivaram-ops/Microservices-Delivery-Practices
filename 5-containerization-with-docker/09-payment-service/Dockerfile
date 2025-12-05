@@ -1,18 +1,10 @@
-# stage 1
-FROM python:3.9.18-alpine3.19 AS builder
-WORKDIR /install
-RUN apk add --no-cache python3-dev build-base linux-headers pcre-dev
-COPY requirements.txt .
-RUN pip install --target=/dependencies -r requirements.txt
-
-# stage 2
 FROM python:3.9.18-alpine3.19
 WORKDIR /app
+RUN apk add python3-dev build-base linux-headers pcre-dev
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
-USER roboshop
-EXPOSE 8080
-ENV PYTHONUNBUFFERED=1
-COPY --from=builder /dependencies /usr/local/lib/python3.9/site-packages/
 COPY *.py /app/
 COPY payment.ini /app/
+EXPOSE 8080
 CMD ["uwsgi", "--ini", "payment.ini"]
