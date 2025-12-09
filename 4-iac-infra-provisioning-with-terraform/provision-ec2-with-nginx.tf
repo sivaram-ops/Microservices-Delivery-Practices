@@ -2,6 +2,9 @@
 provider "aws" {
   region = "us-east-1"
 }
+# note:
+# 1. for security reasons, i removed the provider's access and secret key, and set'em as env vars on my machine.
+# 2. hard coded most of the values here for easy reference. I will add a new tf file with env vars calling from env file. 
 
 # VPC
 resource "aws_vpc" "roboshop-vpc" {
